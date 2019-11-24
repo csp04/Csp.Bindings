@@ -4,8 +4,8 @@ namespace Csp.Events.Core
 {
     public class EventBindingHandler<D> : IDisposable where D : Delegate
     {
-        readonly D _handler;
-        readonly Action<D> _removeHandler;
+        private D _handler;
+        private Action<D> _removeHandler;
 
         EventBindingHandler(D handler,
                                    Action<D> addHandler,
@@ -35,6 +35,8 @@ namespace Csp.Events.Core
                 if (disposing)
                 {
                     _removeHandler(_handler);
+                    _handler = null;
+                    _removeHandler = null;
                 }
                 disposedValue = true;
             }
