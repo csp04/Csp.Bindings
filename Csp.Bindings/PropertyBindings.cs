@@ -6,7 +6,7 @@ using Csp.Events.Core;
 
 namespace Csp.Bindings
 {
-    public static class PropertyBindings
+    public static partial class PropertyBindings
     {
         public static IDisposable WhenChanged<TProperty>(Expression<Func<TProperty>> propertyToListen, Action<TProperty> listener)
         {
