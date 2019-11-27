@@ -5,11 +5,17 @@ namespace Csp.Bindings
 {
     class CompositeDisposable : IDisposable
     {
-        IEnumerable<IDisposable> _disposables;
+        List<IDisposable> _disposables;
 
         public CompositeDisposable(params IDisposable[] disposables)
         {
-            _disposables = disposables;
+            _disposables = new List<IDisposable>( disposables );
+        }
+
+        public IDisposable Add(IDisposable disposable)
+        {
+            _disposables.Add(disposable);
+            return this;
         }
 
         #region IDisposable Support
@@ -22,7 +28,7 @@ namespace Csp.Bindings
                 if (disposing)
                 {
                     foreach (var disposable in _disposables)
-                        disposable.Dispose();
+                        disposable?.Dispose();
 
                     _disposables = null;
                 }
