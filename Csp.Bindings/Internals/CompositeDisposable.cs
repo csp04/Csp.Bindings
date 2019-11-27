@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Csp.Bindings
 {
-    class CompositeDisposable : IDisposable
+    internal class CompositeDisposable : IDisposable
     {
-        List<IDisposable> _disposables;
+        private List<IDisposable> _disposables;
 
         public CompositeDisposable(params IDisposable[] disposables)
         {
@@ -17,6 +17,8 @@ namespace Csp.Bindings
             _disposables.Add(disposable);
             return this;
         }
+
+
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

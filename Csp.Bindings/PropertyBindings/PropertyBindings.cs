@@ -1,8 +1,8 @@
-﻿using Csp.Extensions.Reflections;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using Csp.Events.Core;
+using Csp.Extensions.Reflections;
 
 namespace Csp.Bindings
 {
