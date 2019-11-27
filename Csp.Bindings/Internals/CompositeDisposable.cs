@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Csp.Bindings
 {
-    class Disposables : IDisposable
+    class CompositeDisposable : IDisposable
     {
         IEnumerable<IDisposable> _disposables;
 
-        public Disposables(params IDisposable[] disposables)
+        public CompositeDisposable(params IDisposable[] disposables)
         {
             _disposables = disposables;
         }

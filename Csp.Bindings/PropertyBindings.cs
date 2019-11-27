@@ -48,7 +48,7 @@ namespace Csp.Bindings
             var d1 = WhenChanged(property1, property2);
             var d2 = WhenChanged(property2, property1);
 
-            return new Disposables(d1, d2);
+            return new CompositeDisposable(d1, d2);
         }
 
         private static (string PropertyName, object Source) GetPropertyNameAndSource<T>(this Expression<Func<T>> expression)
