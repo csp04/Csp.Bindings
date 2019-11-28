@@ -23,7 +23,7 @@ namespace Csp.Bindings.Test
 
             int counter = 0;
 
-            PropertyBindings.WhenChanged(() => c1.Count, value => counter = value);
+            Bindings.WhenChanged(() => c1.Count, value => counter = value);
 
             c1.Count++;
 
@@ -37,7 +37,7 @@ namespace Csp.Bindings.Test
 
             int counter = 0;
 
-            var d = PropertyBindings.WhenChanged(() => c1.Count, value => counter = value);
+            var d = Bindings.WhenChanged(() => c1.Count, value => counter = value);
 
             c1.Count++;
 
@@ -56,7 +56,7 @@ namespace Csp.Bindings.Test
             var c1 = new Counter();
             var c2 = new Counter();
 
-            var d = PropertyBindings.WhenChanged(() => c1.Count, () => c2.Count);
+            var d = Bindings.WhenChanged(() => c1.Count, () => c2.Count);
 
             c1.Count = 5;
 
@@ -71,7 +71,7 @@ namespace Csp.Bindings.Test
             var c1 = new Counter();
             var c2 = new Counter();
 
-            var d = PropertyBindings.WhenChanged(() => c1.Count, () => c2.Count);
+            var d = Bindings.WhenChanged(() => c1.Count, () => c2.Count);
 
             c1.Count = 5;
 
@@ -91,7 +91,7 @@ namespace Csp.Bindings.Test
             var c1 = new Counter();
             var c2 = new Counter();
 
-            var d = PropertyBindings.Bind(() => c1.Count, () => c2.Count);
+            var d = Bindings.Bind(() => c1.Count, () => c2.Count);
 
             c1.Count = 5;
 
@@ -108,7 +108,7 @@ namespace Csp.Bindings.Test
             var c1 = new Counter();
             var c2 = new Counter();
 
-            var d = PropertyBindings.Bind(() => c1.Count, () => c2.Count);
+            var d = Bindings.Bind(() => c1.Count, () => c2.Count);
 
             c1.Count = 5;
 
