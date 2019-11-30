@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Csp.Bindings.Test
@@ -123,6 +125,32 @@ namespace Csp.Bindings.Test
             c1.Count++; // 5
 
             Assert.AreEqual(c1.Count, c2.Count + 1);
+
+            
+        }
+
+
+        [TestMethod]
+        public void ObserverProperty_Test1()
+        {
+            var c1 = new Counter();
+
+            int n = 0;
+
+            var d = c1.WhenChanged(() => c1.Count)
+                        .Do(v => v > 0,
+                         c => n = c.Count);
+
+            c1.Count++;
+
+            Assert.IsTrue(n > 0);
+
+            d.Dispose();
+
+            c1.Count++;
+
+            Assert.IsTrue(n == 1);
+
         }
     }
 }

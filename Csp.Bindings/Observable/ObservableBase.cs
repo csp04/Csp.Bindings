@@ -1,38 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Csp.Bindings.Observable
 {
-    internal abstract class ObservableBase<T> : IObservable<T>, IDisposable
+    public abstract class ObservableBase<T, TObserver> : IObservableBase, IObservable<T>, IDisposable
+                                        where TObserver : IObserver<T>
     {
-        private IList<IObserver<T>> _observers;
-        protected IList<IObserver<T>> InternalObservers
+        private IList<TObserver> _observers;
+        private T _observable;
+
+        protected IList<TObserver> InternalObservers
         {
             get => _observers;
         }
 
-        public ObservableBase()
+        protected T InternalObservable
         {
-            _observers = new List<IObserver<T>>();
+            get => _observable;
         }
 
-        public IDisposable Subscribe(IObserver<T> observer)
+        protected ObservableBase(T observable)
+        {
+            _observable = observable;
+            _observers = new List<TObserver>();
+        }
+
+        public IDisposable Subscribe(TObserver observer)
         {
             var disposable = new Unsubscriber(_observers, observer);
 
-            _observers?.Add(observer);
+            lock(_observers)
+                _observers?.Add(observer);
 
             return disposable;
+        }
+
+        public virtual void Update()
+        {
+           
+            if(_observers != null)
+            {
+                lock(_observers)
+                {
+                    var observers = _observers.ToList(); //create a copy
+                    foreach (var obs in observers)
+                        obs?.OnNext(_observable);
+                }
+            }
+
         }
 
 
         private class Unsubscriber : IDisposable
         {
-            private IList<IObserver<T>> _observers;
-            private IObserver<T> _observer;
+            private IList<TObserver> _observers;
+            private TObserver _observer;
 
-            public Unsubscriber(IList<IObserver<T>> observers, IObserver<T> observer)
+            public Unsubscriber(IList<TObserver> observers, TObserver observer)
             {
                 _observers = observers;
                 _observer = observer;
@@ -48,7 +74,8 @@ namespace Csp.Bindings.Observable
                     if (disposing)
                     {
                         // TODO: dispose managed state (managed objects).
-                        _observers?.Remove(_observer);
+                        lock(_observers)
+                            _observers?.Remove(_observer);
                     }
 
                     // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -85,8 +112,16 @@ namespace Csp.Bindings.Observable
             {
                 if (disposing)
                 {
-                    _observers.Clear();
-                    _observers = null;
+                    lock(_observers)
+                    {
+                        foreach (var obs in _observers)
+                        {
+                            obs?.OnCompleted();
+                        }
+
+                        _observers.Clear();
+                        _observers = null;
+                    }
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -110,6 +145,11 @@ namespace Csp.Bindings.Observable
             Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
+        }
+
+        public IDisposable Subscribe(IObserver<T> observer)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

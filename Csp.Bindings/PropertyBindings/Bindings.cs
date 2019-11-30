@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using Csp.Events.Core;
 using Csp.Extensions.Reflections;
+using Csp.Bindings.Observable;
 
 namespace Csp.Bindings
 {
@@ -63,6 +64,17 @@ namespace Csp.Bindings
 
             return new CompositeDisposable(d1, d2);
         }
-        
+
+        #region Observable
+
+        public static ObservableProperty<T, TProperty> WhenChanged<T, TProperty>(this T @this,
+                Expression<Func<TProperty>> propertyToListen) where T : INotifyPropertyChanged
+        {
+            return new ObservableProperty<T, TProperty>(@this, propertyToListen);
+        }
+
+        #endregion
+
+
     }
 }
