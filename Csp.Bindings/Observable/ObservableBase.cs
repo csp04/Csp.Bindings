@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Csp.Events.Core;
 
 namespace Csp.Bindings.Observable
 {
@@ -29,12 +30,10 @@ namespace Csp.Bindings.Observable
 
         public IDisposable Subscribe(TObserver observer)
         {
-            var disposable = new Unsubscriber(_observers, observer);
-
             lock(_observers)
                 _observers?.Add(observer);
 
-            return disposable;
+            return Disposable.Create(() => _observers?.Remove(observer));
         }
 
         public virtual void Update()
@@ -50,57 +49,6 @@ namespace Csp.Bindings.Observable
                 }
             }
 
-        }
-
-
-        private class Unsubscriber : IDisposable
-        {
-            private IList<TObserver> _observers;
-            private TObserver _observer;
-
-            public Unsubscriber(IList<TObserver> observers, TObserver observer)
-            {
-                _observers = observers;
-                _observer = observer;
-            }
-
-            #region IDisposable Support
-            private bool disposedValue = false; // To detect redundant calls
-
-            protected virtual void Dispose(bool disposing)
-            {
-                if (!disposedValue)
-                {
-                    if (disposing)
-                    {
-                        // TODO: dispose managed state (managed objects).
-                        lock(_observers)
-                            _observers?.Remove(_observer);
-                    }
-
-                    // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                    // TODO: set large fields to null.
-
-                    disposedValue = true;
-                }
-            }
-
-            // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-            // ~Unsubscriber()
-            // {
-            //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            //   Dispose(false);
-            // }
-
-            // This code added to correctly implement the disposable pattern.
-            public void Dispose()
-            {
-                // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-                Dispose(true);
-                // TODO: uncomment the following line if the finalizer is overridden above.
-                // GC.SuppressFinalize(this);
-            }
-            #endregion
         }
 
         #region IDisposable Support
