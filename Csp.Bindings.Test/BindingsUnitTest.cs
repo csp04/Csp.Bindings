@@ -1,8 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Csp.Bindings.Test
 {
@@ -126,7 +123,7 @@ namespace Csp.Bindings.Test
 
             Assert.AreEqual(c1.Count, c2.Count + 1);
 
-            
+
         }
 
 

@@ -1,35 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Csp.Bindings.Observable
 {
     public class ObservableProperty<T, TProperty> : ObservableBase<T, IFilterObserver<T, TProperty>> where T : INotifyPropertyChanged
     {
-        private CompositeDisposable _disposables = new CompositeDisposable();
+        private readonly CompositeDisposable _disposables = new CompositeDisposable();
 
         internal ObservableProperty(T observable, Expression<Func<TProperty>> propertyExpr) : base(observable)
         {
 
-             var d = observable.WhenChanged(propertyExpr,
-                                                value =>
-                                                {
-                                                    lock(this.InternalObservers)
-                                                        foreach(var observer in this.InternalObservers)
-                                                        {
-                                                            try
-                                                            {
-                                                                if(observer.Filter(value))
-                                                                    observer.OnNext(observable);
-                                                            }
-                                                            catch(Exception ex)
-                                                            {
-                                                                observer.OnError(ex);
-                                                            }
-                                                        }
-                                                });
+            var d = observable.WhenChanged(propertyExpr,
+                                               value =>
+                                               {
+                                                   lock (this.InternalObservers)
+                                                       foreach (var observer in this.InternalObservers)
+                                                       {
+                                                           try
+                                                           {
+                                                               if (observer.Filter(value))
+                                                                   observer.OnNext(observable);
+                                                           }
+                                                           catch (Exception ex)
+                                                           {
+                                                               observer.OnError(ex);
+                                                           }
+                                                       }
+                                               });
 
             _disposables.Add(d);
         }
@@ -58,7 +56,7 @@ namespace Csp.Bindings.Observable
 
         protected override void Dispose(bool disposing)
         {
-            if(disposing)
+            if (disposing)
             {
                 _disposables.Dispose();
                 base.Dispose(disposing);
@@ -74,8 +72,8 @@ namespace Csp.Bindings.Observable
                 private set;
             }
 
-            private Action<T> _do;
-            private Action<Exception> _onError;
+            private readonly Action<T> _do;
+            private readonly Action<Exception> _onError;
 
             public FilterObserver(Func<TProperty, bool> filter, Action<T> @do, Action<Exception> onError)
             {

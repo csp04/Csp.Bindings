@@ -1,9 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq.Expressions;
+﻿using Csp.Bindings.Observable;
 using Csp.Events.Core;
 using Csp.Extensions.Reflections;
-using Csp.Bindings.Observable;
+using System;
+using System.ComponentModel;
+using System.Linq.Expressions;
 
 namespace Csp.Bindings
 {
@@ -39,13 +39,13 @@ namespace Csp.Bindings
 
         public static IDisposable WhenChanged<TProperty>(Expression<Func<TProperty>> propertyToListen, Action<TProperty> listener)
         {
-            return WhenChanged((LambdaExpression)propertyToListen, listener, null);
+            return WhenChanged(propertyToListen, listener, null);
         }
 
-        public static IDisposable WhenChanged<TSource, TProperty>(this TSource @this, 
+        public static IDisposable WhenChanged<TSource, TProperty>(this TSource @this,
                 Expression<Func<TProperty>> propertyToListen, Action<TProperty> listener) where TSource : INotifyPropertyChanged
         {
-            return WhenChanged((LambdaExpression)propertyToListen, listener, @this);
+            return WhenChanged(propertyToListen, listener, @this);
         }
 
         public static IDisposable WhenChanged<TProperty>(Expression<Func<TProperty>> propertyToListen, Expression<Func<TProperty>> propertyToWrite)

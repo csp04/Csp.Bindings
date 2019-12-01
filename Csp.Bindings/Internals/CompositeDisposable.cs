@@ -9,7 +9,7 @@ namespace Csp.Bindings
 
         public CompositeDisposable(params IDisposable[] disposables)
         {
-            _disposables = new List<IDisposable>( disposables );
+            _disposables = new List<IDisposable>(disposables);
         }
 
         public IDisposable Add(IDisposable disposable)

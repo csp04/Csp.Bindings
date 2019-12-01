@@ -1,51 +1,41 @@
-﻿using System;
+﻿using Csp.Events.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Csp.Events.Core;
 
 namespace Csp.Bindings.Observable
 {
     public abstract class ObservableBase<T, TObserver> : IObservableBase, IObservable<T>, IDisposable
                                         where TObserver : IObserver<T>
     {
-        private IList<TObserver> _observers;
-        private T _observable;
+        protected IList<TObserver> InternalObservers { get; private set; }
 
-        protected IList<TObserver> InternalObservers
-        {
-            get => _observers;
-        }
-
-        protected T InternalObservable
-        {
-            get => _observable;
-        }
+        protected T InternalObservable { get; }
 
         protected ObservableBase(T observable)
         {
-            _observable = observable;
-            _observers = new List<TObserver>();
+            InternalObservable = observable;
+            InternalObservers = new List<TObserver>();
         }
 
         public IDisposable Subscribe(TObserver observer)
         {
-            lock(_observers)
-                _observers?.Add(observer);
+            lock (InternalObservers)
+                InternalObservers?.Add(observer);
 
-            return Disposable.Create(() => _observers?.Remove(observer));
+            return Disposable.Create(() => InternalObservers?.Remove(observer));
         }
 
         public virtual void Update()
         {
-           
-            if(_observers != null)
+
+            if (InternalObservers != null)
             {
-                lock(_observers)
+                lock (InternalObservers)
                 {
-                    var observers = _observers.ToList(); //create a copy
+                    var observers = InternalObservers.ToList(); //create a copy
                     foreach (var obs in observers)
-                        obs?.OnNext(_observable);
+                        obs?.OnNext(InternalObservable);
                 }
             }
 
@@ -60,15 +50,15 @@ namespace Csp.Bindings.Observable
             {
                 if (disposing)
                 {
-                    lock(_observers)
+                    lock (InternalObservers)
                     {
-                        foreach (var obs in _observers)
+                        foreach (var obs in InternalObservers)
                         {
                             obs?.OnCompleted();
                         }
 
-                        _observers.Clear();
-                        _observers = null;
+                        InternalObservers.Clear();
+                        InternalObservers = null;
                     }
                 }
 
