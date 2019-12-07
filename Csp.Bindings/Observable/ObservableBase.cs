@@ -33,8 +33,7 @@ namespace Csp.Bindings.Observable
             {
                 lock (InternalObservers)
                 {
-                    var observers = InternalObservers.ToList(); //create a copy
-                    foreach (var obs in observers)
+                    foreach (var obs in InternalObservers)
                         obs?.OnNext(InternalObservable);
                 }
             }

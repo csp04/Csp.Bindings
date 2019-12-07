@@ -34,7 +34,7 @@ namespace Csp.Bindings.Observable
 
         public ObservableProperty<T, TProperty> Do(Func<TProperty, bool> filter, Action<T> @do, Action<Exception> onError)
         {
-            _disposables.Add(Subscribe(new FilterObserver(filter, @do, onError)));
+            _disposables.Add(Subscribe(new FilterObserver<T, TProperty>(filter, @do, onError)));
             return this;
         }
 
@@ -64,38 +64,7 @@ namespace Csp.Bindings.Observable
 
         }
 
-        private class FilterObserver : IFilterObserver<T, TProperty>
-        {
-            public Func<TProperty, bool> Filter
-            {
-                get;
-                private set;
-            }
-
-            private readonly Action<T> _do;
-            private readonly Action<Exception> _onError;
-
-            public FilterObserver(Func<TProperty, bool> filter, Action<T> @do, Action<Exception> onError)
-            {
-                Filter = filter;
-                _do = @do;
-                _onError = onError;
-            }
-
-            public void OnCompleted()
-            {
-            }
-
-            public void OnError(Exception error)
-            {
-                _onError?.Invoke(error);
-            }
-
-            public void OnNext(T value)
-            {
-                _do?.Invoke(value);
-            }
-        }
+        
 
 
     }

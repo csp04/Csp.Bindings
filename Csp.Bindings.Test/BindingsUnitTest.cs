@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.ComponentModel;
 
 namespace Csp.Bindings.Test
@@ -19,6 +20,7 @@ namespace Csp.Bindings.Test
         public void WhenChanged_Test1()
         {
             var c1 = new Counter();
+
 
             int counter = 0;
 
@@ -142,11 +144,15 @@ namespace Csp.Bindings.Test
 
             Assert.IsTrue(n > 0);
 
+            c1.Count++;
+
+            Assert.IsTrue(n == 2);
+
             d.Dispose();
 
             c1.Count++;
 
-            Assert.IsTrue(n == 1);
+            Assert.IsTrue(n == 2);
 
         }
     }
