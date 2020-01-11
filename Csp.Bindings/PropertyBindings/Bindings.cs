@@ -65,10 +65,6 @@ namespace Csp.Bindings
             return new CompositeDisposable(d1, d2);
         }
 
-        public static IDisposable OneWayBind<TProperty>(Expression<Func<TProperty>> property1, Expression<Func<TProperty>> property2)
-        {
-            return WhenChanged(property1, property2);
-        }
 
         #region Observable
 

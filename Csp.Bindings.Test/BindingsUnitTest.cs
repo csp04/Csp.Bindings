@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Csp.Bindings.Test
 {
@@ -17,7 +18,7 @@ namespace Csp.Bindings.Test
     public class BindingsUnitTest
     {
         [TestMethod]
-        public void WhenChanged_Test1()
+        public async Task WhenChanged_Test1Async()
         {
             var c1 = new Counter();
 
@@ -27,6 +28,10 @@ namespace Csp.Bindings.Test
             Bindings.WhenChanged(() => c1.Count, value => counter = value);
 
             c1.Count++;
+
+            Assert.AreEqual(c1.Count, counter);
+
+            await Task.Run(() => c1.Count++);
 
             Assert.AreEqual(c1.Count, counter);
         }
@@ -155,5 +160,8 @@ namespace Csp.Bindings.Test
             Assert.IsTrue(n == 2);
 
         }
+
+
+
     }
 }

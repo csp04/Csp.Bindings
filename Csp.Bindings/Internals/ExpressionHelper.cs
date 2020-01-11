@@ -33,10 +33,20 @@ namespace Csp.Bindings
             {
                 var constantExpression = sourceMemExpression.GetConstExp();
 
-                var fieldInfo = constantExpression.Value.GetType().GetField(sourceMemExpression.Member.Name,
+                if (sourceMemExpression.Member.MemberType == MemberTypes.Field)
+                {
+                    var fieldInfo = constantExpression.Value.GetType().GetField(sourceMemExpression.Member.Name,
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-                source = fieldInfo?.GetValue(constantExpression.Value);
+                    source = fieldInfo?.GetValue(constantExpression.Value);
+                }
+                else if (sourceMemExpression.Member.MemberType == MemberTypes.Property)
+                {
+                    var propInfo = constantExpression.Value.GetType().GetProperty(sourceMemExpression.Member.Name,
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+                    source = propInfo?.GetValue(constantExpression.Value);
+                }
             }
 
             string propertyName = memberExpression.Member.Name;
