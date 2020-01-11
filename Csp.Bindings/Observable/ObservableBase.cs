@@ -84,10 +84,7 @@ namespace Csp.Bindings.Observable
             // GC.SuppressFinalize(this);
         }
 
-        public IDisposable Subscribe(IObserver<T> observer)
-        {
-            throw new NotImplementedException();
-        }
+       
         #endregion
     }
 }
