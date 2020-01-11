@@ -50,6 +50,7 @@ namespace Csp.Bindings
 
                     source = propInfo?.GetValue(value);
                 }
+
             }
 
             string propertyName = memberExpression.Member.Name;
