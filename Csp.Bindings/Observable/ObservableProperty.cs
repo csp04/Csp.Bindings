@@ -17,15 +17,8 @@ namespace Csp.Bindings.Observable
                                                    lock (this.InternalObservers)
                                                        foreach (var observer in this.InternalObservers)
                                                        {
-                                                           try
-                                                           {
-                                                               if (observer.Filter(value))
-                                                                   observer.OnNext(observable);
-                                                           }
-                                                           catch (Exception ex)
-                                                           {
-                                                               observer.OnError(ex);
-                                                           }
+                                                            if (observer.Filter(value))
+                                                                observer.OnNext(observable);
                                                        }
                                                });
 

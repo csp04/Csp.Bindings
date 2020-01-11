@@ -26,6 +26,12 @@ namespace Csp.Bindings.Observable
             return Disposable.Create(() => InternalObservers?.Remove(observer));
         }
 
+        public IDisposable Subscribe(IObserver<T> observer)
+        {
+            return Subscribe((TObserver)observer);
+        }
+
+
         public virtual void Update()
         {
 
@@ -84,7 +90,8 @@ namespace Csp.Bindings.Observable
             // GC.SuppressFinalize(this);
         }
 
-       
+        
+
         #endregion
     }
 }
