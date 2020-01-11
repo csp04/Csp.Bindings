@@ -25,27 +25,16 @@ namespace Csp.Bindings.Observable
             _disposables.Add(d);
         }
 
-        public ObservableProperty<T, TProperty> Do(Func<TProperty, bool> filter, Action<T> @do, Action<Exception> onError)
+        public ObservableProperty<T, TProperty> Do(Func<TProperty, bool> filter, Action<T> @do)
         {
-            _disposables.Add(Subscribe(new FilterObserver<T, TProperty>(filter, @do, onError)));
+            _disposables.Add(Subscribe(new FilterObserver<T, TProperty>(filter, @do)));
             return this;
-        }
-
-        public ObservableProperty<T, TProperty> Do(Action<T> @do, Action<Exception> onError)
-        {
-            return Do(_ => true, @do, onError);
         }
 
         public ObservableProperty<T, TProperty> Do(Action<T> @do)
         {
-            return Do(_ => true, @do, null);
+            return Do(_ => true, @do);
         }
-
-        public ObservableProperty<T, TProperty> Do(Func<TProperty, bool> filter, Action<T> @do)
-        {
-            return Do(filter, @do, null);
-        }
-
 
         protected override void Dispose(bool disposing)
         {

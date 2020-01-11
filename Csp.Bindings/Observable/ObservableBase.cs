@@ -57,11 +57,6 @@ namespace Csp.Bindings.Observable
                 {
                     lock (InternalObservers)
                     {
-                        foreach (var obs in InternalObservers)
-                        {
-                            obs?.OnCompleted();
-                        }
-
                         InternalObservers.Clear();
                         InternalObservers = null;
                     }

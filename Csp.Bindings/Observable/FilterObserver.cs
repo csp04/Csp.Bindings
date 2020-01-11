@@ -13,22 +13,21 @@ namespace Csp.Bindings.Observable
         }
 
         private readonly Action<T> _do;
-        private readonly Action<Exception> _onError;
 
-        public FilterObserver(Func<TProperty, bool> filter, Action<T> @do, Action<Exception> onError)
+        public FilterObserver(Func<TProperty, bool> filter, Action<T> @do)
         {
             Filter = filter;
             _do = @do;
-            _onError = onError;
         }
 
         public void OnCompleted()
         {
+            throw new NotImplementedException();
         }
 
         public void OnError(Exception error)
         {
-            _onError?.Invoke(error);
+            throw new NotImplementedException();
         }
 
         public void OnNext(T value)
