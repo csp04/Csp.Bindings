@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Csp.Events.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -161,7 +162,25 @@ namespace Csp.Bindings.Test
 
         }
 
+        [TestMethod]
+        public void ObserverProperty_Test2()
+        {
+            var c1 = new Counter();
 
+            int ctr = 0;
+
+            var ev = EventBindingHandler<PropertyChangedEventHandler>
+                        .Create(c1, "PropertyChanged", (_, e) =>
+                        {
+                            ctr++;
+                        });
+
+            c1.Count++;
+
+            ev.Dispose();
+
+            Assert.AreEqual(1, ctr);
+        }
 
     }
 }

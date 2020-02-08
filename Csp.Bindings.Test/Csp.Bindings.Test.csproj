@@ -64,6 +64,10 @@
       <Project>{b4583ea1-5149-48e8-8b5e-5e08578e559d}</Project>
       <Name>Csp.Bindings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Csp.Events.Core\Csp.Events.Core.csproj">
+      <Project>{BA53DB5A-62B3-4FB0-AAD1-8B2E283415B9}</Project>
+      <Name>Csp.Events.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

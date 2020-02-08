@@ -2,14 +2,16 @@
 
 namespace Csp.Events.Core
 {
-    public class EventBindingHandler<D> : IDisposable where D : Delegate
-    {
-        private D _handler;
-        private Action<D> _removeHandler;
+    
 
-        EventBindingHandler(D handler,
-                                   Action<D> addHandler,
-                                   Action<D> removeHandler)
+    public class EventBindingHandler<TEvent> : IDisposable where TEvent : Delegate
+    {
+        private TEvent _handler;
+        private Action<TEvent> _removeHandler;
+
+        EventBindingHandler(TEvent handler,
+                                   Action<TEvent> addHandler,
+                                   Action<TEvent> removeHandler)
         {
             if (handler == null)
                 throw new ArgumentException(nameof(handler));
@@ -47,11 +49,21 @@ namespace Csp.Events.Core
         }
         #endregion
 
-        public static EventBindingHandler<D> Create(D handler,
-                                   Action<D> addHandler,
-                                   Action<D> removeHandler)
+        public static EventBindingHandler<TEvent> Create(TEvent handler,
+                                   Action<TEvent> addHandler,
+                                   Action<TEvent> removeHandler)
         {
-            return new EventBindingHandler<D>(handler, addHandler, removeHandler);
+            return new EventBindingHandler<TEvent>(handler, addHandler, removeHandler);
+        }
+
+        public static EventBindingHandler<TEvent> Create(object src, string eventName, TEvent handler)
+        {
+            var type = src.GetType();
+            var ev = type.GetEvent(eventName);
+
+            return Create(handler,
+                            x => ev.AddEventHandler(src, x),
+                            x => ev.RemoveEventHandler(src, x));
         }
     }
 }
